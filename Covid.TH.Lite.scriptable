@@ -1,0 +1,372 @@
+const NF = new Intl.NumberFormat();
+const sizes = {
+  small: {
+    tiny: 8,
+    small: 10,
+    medium: 12,
+    large: 14,
+    hPadding: 10,
+    vPadding: 10,
+  },
+  medium: {
+    tiny: 12,
+    small: 14,
+    medium: 18,
+    large: 24,
+    hPadding: 18,
+    vPadding: 2,
+  },
+  large: {
+    tiny: 16,
+    small: 20,
+    medium: 26,
+    large: 32,
+    hPadding: 20,
+    vPadding: 16,
+  },
+};
+
+const apiUrl = "https://pass.telekom.de/api/service/generic/v1/status"
+
+const currentSize = sizes[config.widgetFamily] || sizes.large;
+
+const covidData = await fetchCovidDataFromEasySunday();
+async function fetchCovidDataFromEasySunday() {
+  let url = 'https://static.easysunday.com/covid-19/getTodayCases.json';
+  const req = new Request(url);
+  const response = await req.loadJSON();
+  console.log(response);
+  const ret = {
+    newConfirmed: response.NewConfirmed,
+    confirmed: response.Confirmed,
+    newDeaths: response.NewDeaths,
+    deaths: response.Deaths,
+    updateDate: response.UpdateDate,
+    recovered: response.Recovered,
+    hospitalized: response.Hospitalized,
+    newHospitalized: response.NewHospitalized,
+  };
+  return ret;
+}
+
+const widget = new ListWidget();
+await createHeader();
+widget.backgroundColor = new Color('#b5b3b3')
+
+widget.setPadding(0, 0, 0, 0)
+let req = new Request ("https://i.ibb.co/3fSdzZc/1-B8-BDBA9-E86-C-4-B49-97-E2-6-C5-F935-D4998.jpg")
+let image = await req.loadImage()
+widget.backgroundImage = image
+  
+widget.addSpacer(currentSize.hPadding);
+let row1 = await widget.addStack();
+row1.layoutHorizontally();
+if (config.widgetFamily == 'large')
+await addItem(row1, {
+  label: {
+    value: 'ติดเชื้อเพิ่มวันน้ี🦠',
+    style: 'light',
+    fontSize: currentSize.medium,
+    color: '#ffffff',
+  },
+  value: {
+    value: '+' + covidData.newConfirmed,
+    style: 'bold-mono',
+    fontSize: currentSize.large,
+    color: '#FF0000',
+  },
+});
+if (config.widgetFamily == 'medium')
+await addItem(row1, {
+  label: {
+    value: 'ติดเชื้อเพิ่มวันน้ี🦠',
+    style: 'light',
+    fontSize: currentSize.medium,
+    color: '#ffffff',
+  },
+  value: {
+    value: '+' + covidData.newConfirmed,
+    style: 'bold-mono',
+    fontSize: currentSize.large,
+    color: '#FF0000',
+  },
+});
+if (config.widgetFamily == 'small')
+await addItem(row1, {
+  label: {
+    value: 'ติดเชื้อเพิ่มวันน้ี🦠',
+    style: 'light',
+    fontSize: currentSize.tiny,
+    color: '#ffffff',
+  },
+  value: {
+    value: '+' + covidData.newConfirmed,
+    style: 'bold-mono',
+    fontSize: currentSize.small,
+    color: '#FF0000',
+  },
+});
+widget.addSpacer(currentSize.vPadding);
+let row2 = await widget.addStack();
+if (config.widgetFamily == 'large') 
+await addItem(row2, {
+  label: {
+    value: 'เสียชีวิตวันน้ี🪦',
+    style: 'light',
+    fontSize: currentSize.small,
+    color: '#ffffff',
+  },
+  value: {
+    value: '+' + covidData.newDeaths,
+    style: 'bold',
+    fontSize: currentSize.medium,
+    color: '#9004e0',
+  },
+});
+if (config.widgetFamily == 'medium') 
+await addItem(row2, {
+  label: {
+    value: 'เสียชีวิตวันน้ี🪦',
+    style: 'light',
+    fontSize: currentSize.small,
+    color: '#ffffff',
+  },
+  value: {
+    value: '+' + covidData.newDeaths,
+    style: 'bold',
+    fontSize: currentSize.medium,
+    color: '#9004e0',
+  },
+});
+if (config.widgetFamily == 'small') 
+await addItem(row2, {
+  label: {
+    value: 'เสียชีวิตวันน้ี🪦',
+    style: 'light',
+    fontSize: currentSize.tiny,
+    color: '#ffffff',
+  },
+  value: {
+    value: '+' + covidData.newDeaths,
+    style: 'bold',
+    fontSize: currentSize.small,
+    color: '#9004e0',
+  },
+});
+row2.addSpacer();
+if (config.widgetFamily == 'large')
+await addItem(row2, {
+  label: {
+    value: 'เข้ารักษาใหม่🏥',
+    style: 'light',
+    fontSize: currentSize.small,
+    color: '#ffffff',
+  },
+  value: {
+    value: '+'+covidData.newHospitalized*-1,
+    style: 'bold',
+    fontSize: currentSize.medium,
+    color: '#bd3b04',
+  },
+});
+row2.addSpacer();
+widget.addSpacer(currentSize.vPadding);
+if (config.widgetFamily == 'medium')
+await addItem(row2, {
+  label: {
+    value: 'เข้ารักษาใหม่🏥',
+    style: 'light',
+    fontSize: currentSize.small,
+    color: '#ffffff',
+  },
+  value: {
+    value: '+'+covidData.newHospitalized*-1,
+    style: 'bold',
+    fontSize: currentSize.medium,
+    color: '#bd3b04',
+  },
+});
+if (config.widgetFamily == 'small')
+await addItem(row2, {
+  label: {
+    value: 'เข้ารักษาใหม่🏥',
+    style: 'light',
+    fontSize: currentSize.tiny,
+    color: '#ffffff',
+  },
+  value: {
+    value: '+'+covidData.newHospitalized*-1,
+    style: 'bold',
+    fontSize: currentSize.small,
+    color: '#bd3b04',
+  },
+});
+row2.addSpacer();
+widget.addSpacer(currentSize.vPadding);
+
+if (config.widgetFamily == 'large') {
+  let row3 = await widget.addStack();
+  row3.layoutHorizontally();
+  await addItem(row3, {
+    label: {
+      value: 'ติดเชื้อทั้งหมด',
+      style: 'light',
+      fontSize: currentSize.tiny,
+      color: '#ffffff',
+    },
+    value: {
+      value: covidData.confirmed,
+      style: 'regular',
+      fontSize: currentSize.small,
+      color: '#fc8803',
+    },
+  });
+  row3.addSpacer();
+  await addItem(row3, {
+    label: {
+      value: 'เสียชีวิตรวม',
+      style: 'light',
+      fontSize: currentSize.tiny,
+      color: '#ffffff',
+    },
+    value: {
+      value: covidData.deaths,
+      style: 'regular',
+      fontSize: currentSize.small,
+      color: '#fc8803',
+    },
+  });
+  row3.addSpacer();
+  await addItem(row3, {
+    label: {
+      value: 'กำลังรักษาอยู่',
+      style: 'light',
+      fontSize: currentSize.tiny,
+      color: '#ffffff',
+    },
+    value: {
+      value: covidData.hospitalized,
+      style: 'regular',
+      fontSize: currentSize.small,
+      color: '#fc8803',
+    },
+  });
+  row3.addSpacer();
+}
+widget.setPadding(
+  currentSize.hPadding,
+  currentSize.hPadding,
+  currentSize.hPadding,
+  currentSize.hPadding,
+);
+widget.url = 'https://www.facebook.com/mosaw.moszer';
+if (config.runsInApp) {
+  await widget.presentLarge();
+}
+Script.setWidget(widget);
+Script.complete();
+async function createHeader() {
+  let icon = widget.addStack();
+  const coin = await getImage('https://i.postimg.cc/fTsnBLgy/BF12-A236-154-E-4448-A321-0-CCCB9-E6-DEBB.png');
+  if (coin) {
+    let coinImg = icon.addImage(coin);
+    coinImg.imageSize = new Size(currentSize.large, currentSize.large);
+  }
+  const coin1 = await getImage('https://i.ibb.co/DDcKLFw/FE49482-B-D651-4428-AAAC-EC983-B996-E84.png');
+  icon.layoutHorizontally();
+  icon.addSpacer(9);
+  let iconRow = icon.addStack();
+  iconRow.layoutVertically();
+  let iconText = iconRow.addStack();
+  let line1 = iconText.addText('COVID Thailand');
+const coinImg1 = icon.addImage(coin1);
+      coinImg1.imageSize = new Size(currentSize.large, currentSize.large);
+  line1.font = Font.mediumRoundedSystemFont(currentSize.small)
+  line1.textColor = new Color('#FFFFFF');
+  let line2 = iconRow.addText('Update: '+covidData.updateDate.substring(0, 16));
+  line2.font = Font.lightRoundedSystemFont(currentSize.tiny);
+  line2.textColor = new Color('#FFFFFF');
+  line2.leftAlignText();
+}
+  
+
+async function addItem(_row, _item) {
+  let itemRow = _row.addStack();
+  let line1 = itemRow.addText(_item.label.value.toString());
+  await setStyle(
+    line1,
+    _item.label.style,
+    _item.label.fontSize,
+    _item.label.color
+  );
+  itemRow.layoutVertically();
+  itemRow.addSpacer(2);
+  let val = _item.value.value;
+  if (Number(val) && Number(val) > 0) {
+    val = NF.format(val);
+    if (_item.value.value.toString().includes('+')) {
+      val = '+' + val;
+    }
+  }
+  let line2 = itemRow.addText(val.toString());
+  await setStyle(
+    line2,
+    _item.value.style,
+    _item.value.fontSize,
+    _item.value.color
+  );
+}
+
+async function setStyle(obj, style, fontSize, color) {
+  if (style === 'light-mono') {
+    obj.font = Font.lightMonospacedSystemFont(fontSize);
+  } else if (style === 'medium-mono') {
+    obj.font = Font.mediumMonospacedSystemFont(fontSize);
+  } else if (style === 'regular-mono') {
+    obj.font = Font.regularMonospacedSystemFont(fontSize);
+  } else if (style === 'bold-mono') {
+    obj.font = Font.boldMonospacedSystemFont(fontSize);
+  } else if (style === 'light-round') {
+    obj.font = Font.lightRoundedSystemFont(fontSize);
+  } else if (style === 'medium-round') {
+    obj.font = Font.mediumRoundedSystemFont(fontSize);
+  } else if (style === 'regular-round') {
+    obj.font = Font.regularRoundedSystemFont(fontSize);
+  } else if (style === 'bold-round') {
+    obj.font = Font.boldRoundedSystemFont(fontSize);
+  } else if (style === 'light') {
+    obj.font = Font.lightSystemFont(fontSize);
+  } else if (style === 'medium') {
+    obj.font = Font.mediumSystemFont(fontSize);
+  } else if (style === 'regular') {
+    obj.font = Font.regularSystemFont(fontSize);
+  } else if (style === 'bold') {
+    obj.font = Font.boldSystemFont(fontSize);
+  }
+  if (color) {
+    obj.textColor = new Color(color);
+  }
+}
+
+async function getImage(imageUrl) {
+  try {
+    let fm = FileManager.local();
+    let dir = fm.documentsDirectory();
+    let imgSplit = imageUrl.split('/');
+    let path = fm.joinPath(dir, imgSplit[imgSplit.length - 1]);
+    if (fm.fileExists(path)) {
+      return fm.readImage(path);
+    } else {
+      let iconImage = await loadImage(imageUrl);
+      fm.writeImage(path, iconImage);
+      return iconImage;
+    }
+  } catch (e) {
+    console.log(e);
+  }
+}
+
+async function loadImage(imgUrl) {
+  const req = new Request(imgUrl);
+  return await req.loadImage();
+}
