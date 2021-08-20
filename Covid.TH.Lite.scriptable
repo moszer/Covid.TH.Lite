@@ -48,6 +48,18 @@ async function fetchCovidDataFromEasySunday() {
   };
   return ret;
 }
+//fix negative integure
+let aa = covidData.newHospitalized
+function bb(newHos){
+  if(newHos < 0)
+  return newHos*-1
+  else
+  return newHos*1
+}
+let cc = bb(aa)
+console.log('NewHos: '+cc)
+console.log('oldNewhos: '+aa)
+//fix negative integure
 
 const widget = new ListWidget();
 await createHeader();
@@ -163,7 +175,7 @@ await addItem(row2, {
     color: '#ffffff',
   },
   value: {
-    value: '+'+covidData.newHospitalized*-1,
+    value: '+'+cc,
     style: 'bold',
     fontSize: currentSize.medium,
     color: '#bd3b04',
@@ -180,7 +192,7 @@ await addItem(row2, {
     color: '#ffffff',
   },
   value: {
-    value: '+'+covidData.newHospitalized*-1,
+    value: '+'+cc,
     style: 'bold',
     fontSize: currentSize.medium,
     color: '#bd3b04',
@@ -195,7 +207,7 @@ await addItem(row2, {
     color: '#ffffff',
   },
   value: {
-    value: '+'+covidData.newHospitalized*-1,
+    value: '+'+cc,
     style: 'bold',
     fontSize: currentSize.small,
     color: '#bd3b04',
